@@ -1,0 +1,13 @@
+- name: uninstall kubeadm, kubelet and kubectl
+  yum:
+    name="{{ packages }}"
+    state=absent
+  vars:
+    packages:
+      - kubelet
+      - kubeadm
+      - kubectl
+
+- file:
+    path: /etc/yum.repos.d/kubernetes.repo
+    state: absent

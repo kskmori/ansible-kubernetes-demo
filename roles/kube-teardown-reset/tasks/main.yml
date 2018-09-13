@@ -1,0 +1,9 @@
+- name: reset kubernetes
+  command: kubeadm reset --force
+
+# remove old config
+#  this is not mentioned in the documents but necessary
+#  otherwise it will fail when doing kubeadm init/join again
+- file:
+    path: $HOME/.kube
+    state: absent

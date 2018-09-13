@@ -1,0 +1,24 @@
+# add an insecure repository
+#
+#  /etc/docker/daemon.json is used for Docker-CE configuration.
+#    see: https://docs.docker.com/registry/insecure/
+#  /etc/sysconfig/docker is only effective for CentOS bundled Docker.
+
+- name: add an insecure registry 
+  template:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+  notify: restart docker
+
+# XXX: the below does not work;
+#      Ansible mangles the line when it looks like a valid JSON
+#      which causes the docker to fail to start.
+#      Instead we use a template file assuming that other configs is not used.
+#- name: add an insecure registry
+#  lineinfile:
+#    path: /etc/docker/daemon.json
+#    regexp: '^{ \"insecure-registries\" :'
+#    line: '{ "insecure-registries" : ["{{ INSECURE_REGISTRY }}"] }'
+#    state: present
+#    create: yes
+#  notify: restart docker

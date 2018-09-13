@@ -1,0 +1,9 @@
+# based on the document "Tear down" section
+#  https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+#
+#  delete-worker.yml is splitted out for looping over multiple tasks
+
+- include: delete-worker.yml
+  with_items: "{{ groups['k8s-workers'] }}"
+  loop_control:
+    loop_var: nodename

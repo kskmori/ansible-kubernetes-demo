@@ -1,0 +1,69 @@
+# https://docs.docker.com/install/linux/docker-ce/centos/
+
+# add 'ansible-playbook --tags remove-old-docker,all' option to run this
+- name: uninstall old version of docker
+  yum:
+    name="{{ packages }}"
+    state=absent
+  vars:
+    packages:
+      - docker
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-selinux
+      - docker-engine-selinux
+      - docker-engine
+  tags: [ never, remove-old-docker ]
+
+- name: install required packages
+  yum:
+    name="{{ packages }}"
+  vars:
+    packages:
+#      - yum-utils # it only required for yum-config-manager
+      - device-mapper-persistent-data
+      - lvm2
+
+- name: setup repository
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+
+- name: install docker ce
+  yum:
+    name=docker-ce
+    state=present
+
+- name: enable docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+
+# Proxy configuration based on the documents
+#   https://docs.docker.com/config/daemon/systemd/
+# alternatives; setting /etc/sysconfig/docker may also works
+#   https://docs.docker.com/network/proxy/
+- name: proxy configuration directory (if configured)
+  file: path=/etc/systemd/system/docker.service.d state=directory
+  when: USE_PROXY is defined
+- name: proxy configuration file (if configured)
+  template:
+    src: http-proxy.conf.j2
+    dest: /etc/systemd/system/docker.service.d/http-proxy.conf
+  when: USE_PROXY is defined
+  notify: restart docker
+
+#- name: reload systemd for docker proxy configuration
+#  systemd:
+#    daemon_reload: yes
+#- name: restart docker for proxy configuration
+#  systemd:
+#    name: docker
+#    state: restarted
+#  changed_when: false
+

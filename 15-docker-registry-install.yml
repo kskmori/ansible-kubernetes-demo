@@ -1,0 +1,24 @@
+- hosts: docker-registry
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+
+  roles:
+    - role: docker-registry-install
+      tags: docker-registry-install
+
+- hosts: all
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+
+  roles:
+    - role: docker-registry-add
+      tags: docker-registry-add
+
+#
+# exmample command to test if the registry is working properly
+#
+#[root@centos75-master ~]# curl http://192.168.122.69:5000/v2/_catalog
+#{"repositories":[]}
+##

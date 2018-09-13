@@ -1,0 +1,23 @@
+# Kubernetes configuration
+POD_NETWORK_CIDR: 10.244.0.0/16
+
+# proxy configuration; define if necessary
+#  change no_proxy accordingly for the pod network and the host network
+#  10.96.0.0/12 is used by kubeadm internally. (see --service-cidr)
+#
+#  Note:
+#  This is used both for the docker configs and for 
+#  the system wide configs (/etc/environment) for kubeadm.
+#
+#  Docker/kubeadm should accept wildcards/CIDR in no_proxy
+#  but it would not work for some other applications such as curl.
+#    See. https://docs.docker.com/network/proxy/
+#
+#  List up all IP addresses indivisually for each nodes to no_proxy
+#  in order to use curl for testing the connection as described in
+#  the kubernetes-bootcamp tutorial, or unset http_proxy whenever you run curl.
+#USE_PROXY:
+#  - http_proxy=http://xxx.xxx.xxx.xxx:8080/
+#  - https_proxy=http://xxx.xxx.xxx.xxx:8080/
+#  - no_proxy=localhost,127.0.0.1,10.96.0.0/12,10.244.0.0/16,192.168.122.61,192.168.122.62,192.168.122.69
+

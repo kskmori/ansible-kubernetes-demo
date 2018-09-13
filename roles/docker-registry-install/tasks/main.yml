@@ -1,0 +1,10 @@
+- name: install docker registry
+  yum:
+    name=docker-distribution
+    state=present
+
+- name: enable and start docker registry
+  systemd:
+    name: docker-distribution
+    enabled: yes
+    state: started

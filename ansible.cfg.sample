@@ -1,0 +1,8 @@
+[default]
+# human-readable stdout/stderr results display
+#  see. https://github.com/ansible/ansible/issues/27078
+#stdout_callback = debug
+stdout_callback = yaml
+# but does not seem to work for me...
+# alternatively, set environment variable - it works
+# export ANSIBLE_STDOUT_CALLBACK=yaml

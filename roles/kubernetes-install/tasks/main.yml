@@ -1,0 +1,42 @@
+# Based on the official document:
+#   https://kubernetes.io/docs/setup/independent/install-kubeadm/
+
+# required setup described in "Before you begin" and
+# workarounds for CentOS,RHEL or Fedora are
+# moved to the os-config role.
+
+# Setup repository
+- name: setup repository
+  template:
+    src: kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+# workaround as:
+#   https://github.com/ansible/ansible/issues/20711
+- name: update yum cache to enable gpg keys
+  command: yum -q makecache -y --disablerepo='*' --enablerepo=kubernetes
+
+# Install kubeadm, kubelet and kubectl
+# 
+# The document uses --disableexcludes but
+# the option is only supported after ansible 2.6
+#   https://github.com/ansible/ansible/pull/34494  
+# We don't use it here for ansible 2.5 compatibility
+- name: install kubeadm, kubelet and kubectl
+  yum:
+    name="{{ packages }}"
+    state=present
+  vars:
+    packages:
+      - kubelet
+      - kubeadm
+      - kubectl
+
+- name: enable and start kubelet
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+
+  

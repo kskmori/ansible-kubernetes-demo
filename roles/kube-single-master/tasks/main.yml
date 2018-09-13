@@ -1,0 +1,25 @@
+# Based on the official document:
+#  https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+
+# assumes Flannel as a pod network add-on
+- name: initializing master
+  command: kubeadm init --pod-network-cidr={{ POD_NETWORK_CIDR }}
+  tags: kubeadm-init
+
+# kubectl configuration - assumes the root user
+- name: kube config - create directory
+  file:
+    path: $HOME/.kube
+    state: directory
+- name: kube config - copy initial config file
+  command: cp /etc/kubernetes/admin.conf $HOME/.kube/config
+  args:
+    creates: $HOME/.kube/config
+#  if you want to run as kubectl as a normal user then need to do below too
+#  following to the document.
+#    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    
+
+- name: installing Flannel pod network add-on
+  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+

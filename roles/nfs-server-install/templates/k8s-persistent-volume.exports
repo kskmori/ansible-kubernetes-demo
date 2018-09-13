@@ -1,0 +1,1 @@
+{{ NFS_EXPORT_DIR }}	*(rw,sync,no_root_squash,fsid=0)

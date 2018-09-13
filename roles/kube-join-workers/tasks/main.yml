@@ -1,0 +1,47 @@
+# create token for this session on the master
+- block:
+  - name: create token
+    command: kubeadm token create --print-join-command
+# for testing
+#    command: echo kubeadm join --help
+    register: results
+    failed_when: results.stdout is not match('^kubeadm join ')
+  - set_fact:
+      kubeadm_join_cmd: "{{ results.stdout }}"
+  - debug:
+      var: kubeadm_join_cmd
+
+  - name: get nodes list to be joined
+    shell: kubectl get nodes | awk 'NR>1 { print $1 }'
+# for testing
+#    shell: |
+#      echo centos75-61
+#      echo centos75-master
+    changed_when: false
+    register: results
+  - set_fact:
+      kubeadm_join_nodes: "{{ ansible_play_hosts | difference(results.stdout.split()) }}"
+  - debug:
+      var: kubeadm_join_nodes
+
+  when: "'k8s-master' in group_names"
+
+# join each workers
+- block:
+  - name: join a worker
+    command: "{{ hostvars[groups['k8s-master'][0]].kubeadm_join_cmd }}"
+    register: join_results
+  - debug:
+      var: join_results.stdout
+
+#  when: "'k8s-workers' in group_names"
+  when: inventory_hostname in hostvars[groups['k8s-master'][0]].kubeadm_join_nodes
+
+# TODO:
+#  remove token for this session
+#  wait to complete on the master
+#- block:
+#  - name: finish join on the master
+#    debug:
+#      msg: "{{ inventory_hostname }}"
+#  when: "'k8s-master' in group_names"

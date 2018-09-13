@@ -1,0 +1,19 @@
+# nfs-pv.yml, nfs-pvc.yml: based on the spec below
+#  https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
+# Ref.
+#  https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
+- name: copy NFS PV spec file
+  template:
+    src: nfs-pv.yml
+    dest: /tmp/nfs-pv.yml
+
+- name: copy NFS PVC spec file
+  template:
+    src: nfs-pvc.yml
+    dest: /tmp/nfs-pvc.yml
+
+- name: create NFS PersistentVolume
+  command: kubectl create -f /tmp/nfs-pv.yml
+
+- name: create NFS PersistentVolumeClaim
+  command: kubectl create -f /tmp/nfs-pvc.yml

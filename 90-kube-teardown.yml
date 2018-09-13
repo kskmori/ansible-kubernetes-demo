@@ -1,0 +1,15 @@
+- hosts: k8s-master
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+
+  roles:
+    - { role: kube-teardown-delete }
+
+- hosts: all
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+
+  roles:
+    - { role: kube-teardown-reset }

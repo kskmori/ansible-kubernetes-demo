@@ -1,0 +1,25 @@
+# setup NFS server
+
+# create export directory
+- file:
+    path: "{{ NFS_EXPORT_DIR }}"
+    state: directory
+    owner: nfsnobody
+    group: nfsnobody
+    mode: 0700
+
+- name: add exports
+  template:
+    src: k8s-persistent-volume.exports
+    dest: /etc/exports.d/k8s-persistent-volume.exports
+  register: result
+
+- name: reload exports
+  command: exportfs -r
+  when: result.changed
+
+- name: enable and start nfs-server
+  systemd:
+    name: nfs-server
+    enabled: yes
+    state: started

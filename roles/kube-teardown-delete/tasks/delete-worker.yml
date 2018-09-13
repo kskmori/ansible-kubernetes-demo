@@ -1,0 +1,19 @@
+# drain and delete a single worker
+# based on the document "Tear down" section
+#  https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+#
+#  delete-worker.yml is splitted out for looping over multiple tasks
+
+- name: drain a worker
+  command: kubectl drain {{ nodename }} --delete-local-data --force --ignore-daemonsets
+  failed_when: false
+  # ignore any errors for now - better error handling?
+
+- name: delete a worker
+  command: kubectl delete node {{ nodename }}
+  failed_when: false
+  # ignore any errors for now - better error handling?
+
+
+
+ 

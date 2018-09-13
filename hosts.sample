@@ -1,0 +1,12 @@
+[k8s-master]
+centos75-master
+
+[k8s-workers]
+centos75-61
+centos75-62
+
+[docker-registry]
+centos75-master
+
+[nfs-server]
+centos75-master

@@ -1,0 +1,24 @@
+- hosts: nfs-server
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  tags: nfs-server-install
+  roles:
+    - role: nfs-utils-install
+    - role: nfs-server-install
+
+- hosts: k8s-workers
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  roles:
+    - role: nfs-utils-install
+
+- hosts: k8s-master
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  tags: nfs-pv-create
+  roles:
+    - role: nfs-pv-create
+
