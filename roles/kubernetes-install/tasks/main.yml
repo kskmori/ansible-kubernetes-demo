@@ -31,6 +31,17 @@
       - kubeadm
       - kubectl
 
+# additional configuration for kubelet
+#  see. https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/#using-internal-ips-in-your-cluster
+# As of v1.11 the config can be done in /etc/sysconfig/kubelet
+#  https://github.com/kubernetes/kubeadm/issues/203#issuecomment-407046977
+- name: additional kubelet configuration (if necessary)
+  lineinfile:
+    dest="/etc/sysconfig/kubelet"
+    regexp="^KUBELET_EXTRA_ARGS="
+    line="KUBELET_EXTRA_ARGS=--node-ip {{ NODE_IP }}"
+    state=present
+
 - name: enable and start kubelet
   systemd:
     name: kubelet

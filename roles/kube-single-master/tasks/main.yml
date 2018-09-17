@@ -3,7 +3,9 @@
 
 # assumes Flannel as a pod network add-on
 - name: initializing master
-  command: kubeadm init --pod-network-cidr={{ POD_NETWORK_CIDR }}
+  command: >
+    kubeadm init --pod-network-cidr={{ POD_NETWORK_CIDR }}
+    {{ (' --apiserver-advertise-address=' + NODE_IP) if NODE_IP is defined else '' }}
   tags: kubeadm-init
 
 # kubectl configuration - assumes the root user

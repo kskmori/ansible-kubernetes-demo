@@ -1,0 +1,27 @@
+[k8s-master]
+master
+
+[k8s-workers]
+worker1
+worker2
+
+[docker-registry]
+master
+
+[nfs-server]
+master
+
+# Use specified IP address for each nodes
+# See: https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/#using-internal-ips-in-your-cluster
+#[hostvars-k8s]
+#master NODE_IP=192.168.33.10
+#worker1 NODE_IP=192.168.33.101
+#worker2 NODE_IP=192.168.33.102
+
+# Vagrant configuration
+#   you can copy from the Vagrant generated file: 
+#   VAGRANTDIR/.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
+#[hostvars-vagrant]
+#master ansible_host=127.0.0.1 ansible_port=2220 ansible_user='vagrant' ansible_ssh_private_key_file='VAGRANTDIR/.vagrant/machines/master/virtualbox/private_key'
+#worker1 ansible_host=127.0.0.1 ansible_port=2221 ansible_user='vagrant' ansible_ssh_private_key_file='VAGRANTDIR/.vagrant/machines/worker1/virtualbox/private_key'
+#worker2 ansible_host=127.0.0.1 ansible_port=2222 ansible_user='vagrant' ansible_ssh_private_key_file='VAGRANTDIR/.vagrant/machines/worker2/virtualbox/private_key'
