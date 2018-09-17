@@ -1,6 +1,10 @@
 # Kubernetes configuration
 POD_NETWORK_CIDR: 10.244.0.0/16
 
+# Flannel configuration
+#   mandatory in the vagrant environment
+#FLANNELD_IFACE: eth1
+
 # proxy configuration; define if necessary
 #  change no_proxy accordingly for the pod network and the host network
 #  10.96.0.0/12 is used by kubeadm internally. (see --service-cidr)

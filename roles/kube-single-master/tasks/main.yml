@@ -22,6 +22,25 @@
 #    sudo chown $(id -u):$(id -g) $HOME/.kube/config
     
 
+# Install Flannel pod network add-on
+#  equivalent to
+#    command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+#  but instead download it once and apply from the local file
+#  to allow to customize the iface option to support vagrant environment.
+#    https://kubernetes.io/docs/setup/independent/troubleshooting-kubeadm/#default-nic-when-using-flannel-as-the-pod-network-in-vagrant
+#
+- name: download Flannel pod network add-on
+  get_url:
+    url: https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+    dest: /tmp/kube-flannel.yml
+
+- name: customize Flannel iface (if necessary)
+  lineinfile:
+    path: /tmp/kube-flannel.yml
+    insertafter: '- --kube-subnet-mgr'
+    line: "        - --iface {{ FLANNELD_IFACE }}"
+  when: FLANNELD_IFACE is defined
+
 - name: installing Flannel pod network add-on
-  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+  command: kubectl apply -f /tmp/kube-flannel.yml
 
