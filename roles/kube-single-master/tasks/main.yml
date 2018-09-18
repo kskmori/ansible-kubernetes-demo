@@ -38,7 +38,7 @@
   lineinfile:
     path: /tmp/kube-flannel.yml
     insertafter: '- --kube-subnet-mgr'
-    line: "        - --iface {{ FLANNELD_IFACE }}"
+    line: "        - --iface={{ FLANNELD_IFACE }}"
   when: FLANNELD_IFACE is defined
 
 - name: installing Flannel pod network add-on
