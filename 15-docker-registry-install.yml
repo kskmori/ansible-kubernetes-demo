@@ -6,6 +6,8 @@
   roles:
     - role: docker-registry-install
       tags: docker-registry-install
+    - role: docker-registry-prepare-images
+      tags: docker-registry-prepare-images
 
 - hosts: all
   become: true

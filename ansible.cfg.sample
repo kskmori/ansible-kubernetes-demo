@@ -3,8 +3,7 @@
 #  see. https://github.com/ansible/ansible/issues/27078
 #stdout_callback = debug
 stdout_callback = yaml
-# but does not seem to work for me...
-# alternatively, set environment variable - it works
+# alternatively, set environment variable
 # export ANSIBLE_STDOUT_CALLBACK=yaml
 
 # Vagrant ssh config

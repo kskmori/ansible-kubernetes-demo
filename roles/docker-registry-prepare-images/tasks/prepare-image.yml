@@ -1,0 +1,12 @@
+- name: check if the image is already prepared
+  command: docker images -q {{ INSECURE_REGISTRY }}/{{ imagename }}
+  changed_when: false
+  register: imageid
+
+- name: create tag to the image
+  command: docker tag {{ imagename }} {{ INSECURE_REGISTRY }}/{{ imagename }}
+  when: imageid.stdout == ""
+
+- name: push the image to the local registry
+  command: docker push {{ INSECURE_REGISTRY }}/{{ imagename }}
+  when: imageid.stdout == ""
