@@ -2,21 +2,25 @@
   become: true
   max_fail_percentage: 0
   gather_facts: no
-
   roles:
     - role: docker-registry-install
       tags: docker-registry-install
-    - role: docker-registry-prepare-images
-      tags: docker-registry-prepare-images
 
 - hosts: all
   become: true
   max_fail_percentage: 0
   gather_facts: no
-
   roles:
     - role: docker-registry-add
       tags: docker-registry-add
+
+- hosts: docker-registry
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  roles:
+    - role: docker-registry-prepare-images
+      tags: docker-registry-prepare-images
 
 #
 # exmample command to test if the registry is working properly

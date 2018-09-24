@@ -3,6 +3,10 @@
   changed_when: false
   register: imageid
 
+- name: pull the image
+  command: docker pull {{ imagename }}
+  when: imageid.stdout == ""
+
 - name: create tag to the image
   command: docker tag {{ imagename }} {{ INSECURE_REGISTRY }}/{{ imagename }}
   when: imageid.stdout == ""
