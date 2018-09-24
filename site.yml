@@ -1,0 +1,19 @@
+- import_playbook: 10-os-config.yml
+- import_playbook: 11-docker-ce-install.yml
+- import_playbook: 12-kubernetes-install.yml
+- import_playbook: 13-kube-single-master.yml
+- import_playbook: 14-kube-join-workers.yml
+- import_playbook: 15-docker-registry-install.yml
+- import_playbook: 16-nfs-persistent-volume.yml
+
+
+
+
+
+
+
+
+
+
+
+
