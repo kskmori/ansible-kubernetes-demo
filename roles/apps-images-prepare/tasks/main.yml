@@ -1,0 +1,15 @@
+- name: prepare official images into the local insecure registry
+  include: prepare-image.yml
+  loop_control:
+    loop_var: imagename
+  with_items:
+    - "postgres:9.6.10"
+
+- name: build apps images
+  include_tasks: build-image.yml
+  loop_control:
+    loop_var: image
+  with_items:
+    - { tag: "{{ INSECURE_REGISTRY }}/pcmktest:postgres", dir: "db-pod" }
+    - { tag: "{{ INSECURE_REGISTRY }}/pcmktest:httpd", dir: "web-pod" }
+

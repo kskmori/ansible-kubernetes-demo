@@ -1,0 +1,8 @@
+- name: remove apps images
+  include_tasks: remove-image.yml
+  loop_control:
+    loop_var: image_path
+  with_items:
+    - "{{ INSECURE_REGISTRY }}/pcmktest:httpd"
+    - "{{ INSECURE_REGISTRY }}/pcmktest:postgres"
+

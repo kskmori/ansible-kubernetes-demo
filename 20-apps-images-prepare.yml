@@ -1,0 +1,18 @@
+# For development only
+# Note that it will only remove locally stored images
+# the images on the insecure repository can not be removed
+- hosts: all
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  roles:
+    - role: apps-images-remove
+      tags: never,force-apps-images-remove
+
+# Build all images for the apps and push them to the insecure repository
+- hosts: k8s-master
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  roles:
+    - role: apps-images-prepare

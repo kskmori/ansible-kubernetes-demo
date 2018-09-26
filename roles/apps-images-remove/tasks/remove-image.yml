@@ -1,0 +1,8 @@
+- name: check if the image exists
+  command: "docker images -q {{ image_path }}"
+  changed_when: false
+  register: imageid
+
+- name: remove the image if exists
+  command: "docker rmi {{ imageid.stdout }}"
+  when: imageid.stdout != ""

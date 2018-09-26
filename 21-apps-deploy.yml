@@ -1,0 +1,15 @@
+# create mount point for the database on the shared storage
+# the database initialization should be done in the pod after deployed
+- hosts: nfs-server
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  roles:
+    - role: apps-init-volume
+
+- hosts: k8s-master
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  roles:
+    - role: apps-deploy

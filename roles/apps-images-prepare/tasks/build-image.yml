@@ -1,0 +1,32 @@
+# this tasks should be included with
+# loop_var: image { tag: , dir: }
+
+- name: check the image and skip rebuilding it if exists
+  command: docker images -q {{ image.tag }}
+  changed_when: false
+  register: imageid
+
+# rebuild the image when it does not exist
+- block:
+  - name: copy image Dockerfiles
+    copy:
+      src: "{{ image.dir }}/"
+      dest: "/tmp/{{ image.dir }}"
+
+  - name: setup --build-arg for proxy configuration
+    command: echo {{ (' --build-arg ' + USE_PROXY|join(' --build-arg ')) if USE_PROXY is defined else '' }}
+    changed_when: false
+    register: buildargs
+
+  - name: rebuild the image
+    command: docker build -t {{ image.tag }} {{ buildargs.stdout }} .
+    args:
+      chdir: /tmp/{{ image.dir }}
+
+  - name: push the image to the insecure repository
+    command: docker push {{ image.tag }}
+    when: image.tag is search(INSECURE_REGISTRY)
+    # this when: is to avoid accidentally push to the public repository
+
+
+  when: imageid.stdout == ""

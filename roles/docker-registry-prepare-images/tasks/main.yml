@@ -1,6 +1,0 @@
-- name: prepare images in the local docker registry
-  include: prepare-image.yml
-  with_items:
-    - "postgres:9.6.10"
-  loop_control:
-    loop_var: imagename

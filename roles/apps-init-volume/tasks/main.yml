@@ -1,0 +1,5 @@
+# path should be matched to the volume definition in the postgres pod
+- name: create mount point on NFS server for the postgres pod
+  file:
+    path: "{{ NFS_EXPORT_DIR }}/pgdata-postgres-statefulset"
+    state: directory
