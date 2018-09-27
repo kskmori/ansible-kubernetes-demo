@@ -1,16 +1,16 @@
 - name: copy postgres service spec file
   template:
     src: postgres-statefulset.yml.j2
-    dest: /tmp/postgres-statefulset.yml
+    dest: "{{ KUBE_WORK_DIR }}/postgres-statefulset.yml"
 
 - name: deploy postgres service
-  command: kubectl create -f /tmp/postgres-statefulset.yml
+  command: kubectl create -f {{ KUBE_WORK_DIR }}/postgres-statefulset.yml
 
 
 - name: copy httpd service spec file
   template:
     src: httpd-deployment.yml.j2
-    dest: /tmp/httpd-deployment.yml
+    dest: "{{ KUBE_WORK_DIR }}/httpd-deployment.yml"
 
 - name: deploy httpd service
-  command: kubectl create -f /tmp/httpd-deployment.yml
+  command: kubectl create -f {{ KUBE_WORK_DIR }}/httpd-deployment.yml

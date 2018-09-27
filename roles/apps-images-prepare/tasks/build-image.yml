@@ -11,7 +11,7 @@
   - name: copy image Dockerfiles
     copy:
       src: "{{ image.dir }}/"
-      dest: "/tmp/{{ image.dir }}"
+      dest: "{{ KUBE_WORK_DIR }}/{{ image.dir }}"
 
   - name: setup --build-arg for proxy configuration
     command: echo {{ (' --build-arg ' + USE_PROXY|join(' --build-arg ')) if USE_PROXY is defined else '' }}
@@ -21,7 +21,7 @@
   - name: rebuild the image
     command: docker build -t {{ image.tag }} {{ buildargs.stdout }} .
     args:
-      chdir: /tmp/{{ image.dir }}
+      chdir: "{{ KUBE_WORK_DIR }}/{{ image.dir }}"
 
   - name: push the image to the insecure repository
     command: docker push {{ image.tag }}

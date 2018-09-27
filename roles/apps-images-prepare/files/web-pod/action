@@ -6,7 +6,7 @@ import sys
 
 myhost = os.uname()[1];
 
-dbhost = os.getenv('POSTGRES_SERVICE_SERVICE_HOST')
+dbhost = os.getenv('POSTGRES_SERVICE_HOST')
 if dbhost is None:
 	dbhost = os.getenv('POSTGRES_PORT_5432_TCP_ADDR')
 	if dbhost is None:

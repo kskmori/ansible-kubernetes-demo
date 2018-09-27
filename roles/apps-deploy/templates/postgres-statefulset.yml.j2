@@ -30,13 +30,13 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: postgres
-          image: {{ INSECURE_REGISTRY }}/postgres:9.6.10
+          image: {{ INSECURE_REGISTRY }}/pcmktest:postgres
           ports:
             - containerPort: 5432
               name: postgres
           volumeMounts:
             - name: db-volume
-              mountPath: "/var/lib/postgresql/data"
+              mountPath: "/var/lib/pgsql/data"
       volumes:
         - name: db-volume
           nfs:
