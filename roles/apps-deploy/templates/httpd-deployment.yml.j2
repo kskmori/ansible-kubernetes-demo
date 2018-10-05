@@ -30,7 +30,16 @@ spec:
         app: httpd
     spec:
       containers:
-        - image: {{ INSECURE_REGISTRY }}/pcmktest:httpd
+        - image: {{ APPS_HTTPD_IMAGE }}
           name: httpd-container
           ports:
             - containerPort: 80
+      volumes:
+         - name: httpd-conf
+           hostPath:
+             path: /mnt/nfs/httpd-deployment/conf.d
+             type: Directory
+         - name: httpd-www
+           hostPath:
+             path: /mnt/nfs/httpd-deployment/www
+             type: Directory

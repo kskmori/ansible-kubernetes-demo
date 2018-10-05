@@ -3,6 +3,6 @@
   loop_control:
     loop_var: image_path
   with_items:
-    - "{{ INSECURE_REGISTRY }}/pcmktest:httpd"
-    - "{{ INSECURE_REGISTRY }}/pcmktest:postgres"
+    - "{{ APPS_POSTGRES_IMAGE }}"
+    - "{{ APPS_HTTPD_IMAGE }}"
 

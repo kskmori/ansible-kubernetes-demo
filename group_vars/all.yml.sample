@@ -15,6 +15,9 @@ NFS_EXPORT_DIR: /home/nfs
 
 # working directory for the demo apps
 KUBE_WORK_DIR: /tmp/kube-work
+# image names of the demo apps
+APPS_POSTGRES_IMAGE: "{{ INSECURE_REGISTRY }}/pcmkdemo/postgres:0.1"
+APPS_HTTPD_IMAGE: "{{ INSECURE_REGISTRY }}/pcmkdemo/httpd:0.1"
 
 # proxy configuration; define if necessary
 #  change no_proxy accordingly for the pod network and the host network

@@ -24,7 +24,17 @@ else
 
     # intial table setup for the application
     runuser postgres -c "pg_ctl start -w"
-    runuser postgres -c "psql -h localhost -U postgres -f init.sql"
+    for f in /initdb.d/*; do
+      case "$f" in
+      *.sql)
+        echo "running $f"
+        runuser postgres -c "psql -h localhost -U postgres -f '$f'"
+        ;;
+      *)
+        echo "ignoring $f"
+        ;;
+      esac
+    done
     runuser postgres -c "pg_ctl stop -w"
 fi
 

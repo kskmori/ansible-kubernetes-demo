@@ -30,7 +30,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: postgres
-          image: {{ INSECURE_REGISTRY }}/pcmktest:postgres
+          image: {{ APPS_POSTGRES_IMAGE }}
           ports:
             - containerPort: 5432
               name: postgres
@@ -39,9 +39,16 @@ spec:
               mountPath: "/var/lib/pgsql/data"
       volumes:
         - name: db-volume
-          nfs:
-            server: {{ NFS_SERVER }}
-            path: "/pgdata-postgres-statefulset"
+          hostPath:
+            path: /mnt/nfs/postgres-statefulset-pgdata
+            type: Directory
+
+### using nfs directive
+#      volumes:
+#        - name: db-volume
+#          nfs:
+#            server: {{ NFS_SERVER }}
+#            path: "/postgres-statefulset-pgdata"
 
 ### under development
 ###  need to more work for shareing nfs with multiple instances

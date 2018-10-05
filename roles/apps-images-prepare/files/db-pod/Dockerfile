@@ -2,8 +2,8 @@ FROM centos:centos7
 USER root
 
 ADD initdb.sh /
-ADD init.sql /
 RUN chmod a+x /initdb.sh
+RUN mkdir /initdb.d
 
 RUN yum install -y postgresql-server
 RUN yum install -y which

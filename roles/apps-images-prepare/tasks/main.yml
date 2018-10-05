@@ -1,5 +1,5 @@
-- name: prepare official images into the local insecure registry
-  include: prepare-image.yml
+- name: download official images into the local insecure registry
+  include: download-image.yml
   loop_control:
     loop_var: imagename
   with_items:
@@ -10,6 +10,6 @@
   loop_control:
     loop_var: image
   with_items:
-    - { tag: "{{ INSECURE_REGISTRY }}/pcmktest:postgres", dir: "db-pod" }
-    - { tag: "{{ INSECURE_REGISTRY }}/pcmktest:httpd", dir: "web-pod" }
+    - { tag: "{{ APPS_POSTGRES_IMAGE }}", dir: "db-pod" }
+    - { tag: "{{ APPS_HTTPD_IMAGE }}", dir: "web-pod" }
 

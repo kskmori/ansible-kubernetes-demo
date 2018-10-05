@@ -1,5 +1,47 @@
+# using NFS storage as a hostPath volumes in this sample apps
+- name: create NFS mount point
+  file: path=/mnt/nfs state=directory
+
+- name: mount NFS storage as a shared volume
+  mount:
+    path: /mnt/nfs
+    src: "{{ NFS_SERVER }}:{{ NFS_EXPORT_DIR }}"
+    fstype: nfs
+    state: mounted
+
 # path should be matched to the volume definition in the postgres pod
 - name: create mount point on NFS server for the postgres pod
   file:
-    path: "{{ NFS_EXPORT_DIR }}/pgdata-postgres-statefulset"
+    path: "{{ NFS_EXPORT_DIR }}/postgres-statefulset-pgdata"
     state: directory
+
+- name: create mount point on NFS server for the httpd pod
+  file:
+    path: "{{ NFS_EXPORT_DIR }}/httpd-deployment/"
+    state: directory
+- name: create sub directory for the httpd pod /etc/httpd/conf.d
+  file:
+    path: "{{ NFS_EXPORT_DIR }}/httpd-deployment/conf.d"
+    state: directory
+- name: create sub directory for the httpd pod /var/www/html
+  file:
+    path: "{{ NFS_EXPORT_DIR }}/httpd-deployment/www/html"
+    state: directory
+- name: create sub directory for the httpd pod /var/www/cgi-bin
+  file:
+    path: "{{ NFS_EXPORT_DIR }}/httpd-deployment/www/cgi-bin"
+    state: directory
+
+- name: httpd pod sample apps app.conf
+  copy:
+    src: app.conf
+    dest: "{{ NFS_EXPORT_DIR }}/httpd-deployment/conf.d/app.conf"
+- name: httpd pod sample apps index.html
+  copy:
+    src: index.html
+    dest: "{{ NFS_EXPORT_DIR }}/httpd-deployment/www/html/index.html"
+- name: httpd pod sample apps selectnow
+  copy:
+    src: selectnow
+    dest: "{{ NFS_EXPORT_DIR }}/httpd-deployment/www/cgi-bin/selectnow"
+    mode: 0755
