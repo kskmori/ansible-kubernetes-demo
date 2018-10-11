@@ -5,3 +5,6 @@
 - import_playbook: 14-kube-join-workers.yml
 - import_playbook: 15-docker-registry-install.yml
 - import_playbook: 16-nfs-persistent-volume.yml
+
+- import_playbook: 20-apps-images-prepare.yml
+- import_playbook: 21-apps-deploy.yml

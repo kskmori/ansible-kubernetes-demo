@@ -1,4 +1,13 @@
-# create mount point for the database on the shared storage
+# mount the shared storage for the sample apps volumes
+# current sample apps assumes hostPath volumes
+- hosts: k8s-workers
+  become: true
+  max_fail_percentage: 0
+  gather_facts: no
+  roles:
+    - role: apps-prepare-volume
+
+# initialize the contents of the volumes for sample apps
 # the database initialization should be done in the pod after deployed
 - hosts: nfs-server
   become: true

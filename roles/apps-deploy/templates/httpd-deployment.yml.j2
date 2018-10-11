@@ -34,6 +34,11 @@ spec:
           name: httpd-container
           ports:
             - containerPort: 80
+          volumeMounts:
+            - name: httpd-conf
+              mountPath: "/etc/httpd/conf.d"
+            - name: httpd-www
+              mountPath: "/var/www"
       volumes:
          - name: httpd-conf
            hostPath:
