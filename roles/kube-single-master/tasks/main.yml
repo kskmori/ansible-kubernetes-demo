@@ -6,7 +6,22 @@
   command: >
     kubeadm init --pod-network-cidr={{ POD_NETWORK_CIDR }}
     {{ (' --apiserver-advertise-address=' + NODE_IP) if NODE_IP is defined else '' }}
-  tags: kubeadm-init
+  tags: never,kubeadm-init
+
+# alternative way to kubeadm init with configurations
+#  choose a tag kubeadm-init or kubeadm-init-config
+#
+#  this config includes the tuning for shorter timeouts of node down
+#  see the documents
+#   https://v1-11.docs.kubernetes.io/docs/setup/independent/control-plane-flags/
+#   https://v1-11.docs.kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
+- name: prepare configuration file
+  template:
+    src: kubeadm-config.yml.j2
+    dest: /tmp/kubeadm-config.yml
+- name: initializing master with configurations
+  command: "kubeadm init --config=/tmp/kubeadm-config.yml"
+  tags: kubeadm-init-config
 
 # kubectl configuration - assumes the root user
 - name: kube config - create directory
