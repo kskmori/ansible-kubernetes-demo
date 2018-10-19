@@ -18,7 +18,8 @@
   become: true
   max_fail_percentage: 0
   gather_facts: no
-  tags: nfs-pv-create
+  # only for development and not used in use right now
+  tags: never, nfs-pv-create
   roles:
     - role: nfs-pv-create
 
