@@ -11,8 +11,13 @@
 - name: disable swap (runtime)
   command: swapoff -a
 
-#- name: disable swap (permanent)
-# TODO:
+- name: disable swap (permanent)
+  lineinfile:
+    dest: /etc/fstab
+    backrefs: yes
+    regexp: '^([^\s]+\s+swap\s+.*)'
+    line: '# \1'
+    state: present
 
 # disable firewalld for now to allow all requires ports
 # see "Check required ports" section for details
@@ -25,15 +30,21 @@
 # some workarounds described in the documents for CentOS,RHEL or Fedora
 - name: disable SELinux (runtime)
   command: setenforce 0
-#- name: disable SELinux (permanent)
-# TODO: /etc/selinux/config 
+- name: disable SELinux (permanent)
+  lineinfile:
+    dest: /etc/selinux/config
+    regexp: "^SELINUX="
+    line: "SELINUX=permissive"
+    state: present
 
 - name: workaround of routing issues
   template:
     src: k8s.conf
     dest: /etc/sysctl.d/k8s.conf
+  register: rc
 - name: reload workaround of routing issues
   command: sysctl --system
+  when: rc.changed
 
 # Add proxy configuration to system environment variables
 #  this is not described in the document
