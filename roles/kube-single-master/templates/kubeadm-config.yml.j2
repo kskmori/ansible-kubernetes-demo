@@ -9,6 +9,8 @@ kubernetesVersion: v1.15.3
 apiServer:
   extraArgs:
     advertise-address: {{ NODE_IP }}
+    default-not-ready-toleration-seconds: "20"
+    default-unreachable-toleration-seconds: "20"
 networking:
   podSubnet: {{ POD_NETWORK_CIDR }}
 controllerManager:
