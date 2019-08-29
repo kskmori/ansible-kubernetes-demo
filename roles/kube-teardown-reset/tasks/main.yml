@@ -1,5 +1,6 @@
 - name: reset kubernetes
   command: kubeadm reset --force
+  failed_when: false
 
 # remove old config
 #  this is not mentioned in the documents but necessary
@@ -7,3 +8,20 @@
 - file:
     path: $HOME/.kube
     state: absent
+
+# cleanup flannel
+#  https://github.com/coreos/flannel/issues/886
+#  https://stackoverflow.com/questions/46276796/kubernetes-cannot-cleanup-flannel/46438072#46438072
+- name: cleanup flannel config files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/lib/cni/
+    - /run/flannel
+    - /etc/cni/
+- name: cleanup flannel interfaces
+  shell: |
+    ip link delete cni0
+    ip link delete flannel.1
+  failed_when: false
