@@ -4,21 +4,20 @@
 #    see: https://docs.docker.com/registry/insecure/
 #  /etc/sysconfig/docker is only effective for CentOS bundled Docker.
 
+- name: read daemon.json file
+  command: cat /etc/docker/daemon.json
+  register: json
+  changed_when: false
+  failed_when: false
+- set_fact:
+    daemon_json: "{{ json.stdout | default('[]', true) | from_json }}"
+
 - name: add an insecure registry 
-  template:
-    src: daemon.json
+  set_fact:
+    daemon_json: "{{ daemon_json | combine({'insecure-registries' : [ INSECURE_REGISTRY ] }) }}"
+
+- name: write back daemon.json file
+  copy:
+    content: "{{ daemon_json | to_nice_json }}"
     dest: /etc/docker/daemon.json
   notify: restart docker
-
-# XXX: the below does not work;
-#      Ansible mangles the line when it looks like a valid JSON
-#      which causes the docker to fail to start.
-#      Instead we use a template file assuming that other configs is not used.
-#- name: add an insecure registry
-#  lineinfile:
-#    path: /etc/docker/daemon.json
-#    regexp: '^{ \"insecure-registries\" :'
-#    line: '{ "insecure-registries" : ["{{ INSECURE_REGISTRY }}"] }'
-#    state: present
-#    create: yes
-#  notify: restart docker
