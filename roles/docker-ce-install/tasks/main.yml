@@ -39,10 +39,18 @@
 
 - name: create /etc/docker directory
   file: path=/etc/docker state=directory
-- name: setup daemon
-  template:
-    src: daemon.json
-    dest: /etc/docker/daemon.json
+
+- name: setup deamon (reset daemon.json)
+  file: path=/etc/docker/daemon.json state=absent
+# https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker
+# disable this configuration described in the documents
+# to avoid restarting docker when the insecure registry added later
+# kubelet fails after docker restarted:
+#   Aug 29 08:45:21 master kubelet: F0829 08:45:21.696874   22527 server.go:273] failed to run Kubelet: failed to create kubelet: misconfiguration: kubelet cgroup driver: "cgroupfs" is different from docker cgroup driver: "systemd"
+#- name: setup daemon
+#  template:
+#    src: daemon.json
+#    dest: /etc/docker/daemon.json
 
 - name: enable docker
   systemd:
