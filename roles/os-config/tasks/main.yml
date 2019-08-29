@@ -37,6 +37,10 @@
     line: "SELINUX=permissive"
     state: present
 
+- name: make sure br_netfilter module is loaded
+  command: modprobe br_netfilter
+  changed_when: false
+
 - name: workaround of routing issues
   template:
     src: k8s.conf

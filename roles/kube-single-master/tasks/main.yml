@@ -13,8 +13,8 @@
 #
 #  this config includes the tuning for shorter timeouts of node down
 #  see the documents
-#   https://v1-11.docs.kubernetes.io/docs/setup/independent/control-plane-flags/
-#   https://v1-11.docs.kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
+#   https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/control-plane-flags/
+#   https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/#config-file
 - name: prepare configuration file
   template:
     src: kubeadm-config.yml.j2
@@ -39,14 +39,14 @@
 
 # Install Flannel pod network add-on
 #  equivalent to
-#    command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+#    command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
 #  but instead download it once and apply from the local file
 #  to allow to customize the iface option to support vagrant environment.
 #    https://kubernetes.io/docs/setup/independent/troubleshooting-kubeadm/#default-nic-when-using-flannel-as-the-pod-network-in-vagrant
 #
 - name: download Flannel pod network add-on
   get_url:
-    url: https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+    url: https://raw.githubusercontent.com/coreos/flannel/62e44c867a2846fefb68bd5f178daf4da3095ccb/Documentation/kube-flannel.yml
     dest: /tmp/kube-flannel.yml
 
 - name: customize Flannel iface (if necessary)

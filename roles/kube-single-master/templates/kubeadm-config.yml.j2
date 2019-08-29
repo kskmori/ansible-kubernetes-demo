@@ -1,12 +1,17 @@
-apiVersion: kubeadm.k8s.io/v1alpha2
-kind: MasterConfiguration
-kubernetesVersion: v1.11.0
-metadata:
-  name: 1.11-sample
-api:
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+localAPIEndpoint:
   advertiseAddress: {{ NODE_IP }}
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v1.15.3
+apiServer:
+  extraArgs:
+    advertise-address: {{ NODE_IP }}
 networking:
   podSubnet: {{ POD_NETWORK_CIDR }}
-controllerManagerExtraArgs:
-  node-monitor-grace-period: "20s"
-  pod-eviction-timeout: "40s"
+controllerManager:
+  extraArgs:
+    node-monitor-grace-period: "20s"
+    pod-eviction-timeout: "40s"
